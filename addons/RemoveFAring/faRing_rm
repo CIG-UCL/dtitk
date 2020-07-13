@@ -1,0 +1,94 @@
+#!/bin/bash
+#!/bin/bash
+#============================================================================
+#
+#  Program:     This is a plug-in which integrates with both
+#		FMRIB Software Library (FSL) and DTI ToolKit (DTI-TK)
+#  Module:      $RCSfile: dti_rigid_reg,v $
+#  Language:    bash
+#  Date:        $Date: 2020/10/07 16:10:40 $
+#  Version:     $Revision: 0 $
+#
+#  Copyright (c)
+#  Michele Guerreri (michele.guerreri@gmail.com)
+#  Gary Hui Zhang (garyhuizhang@gmail.com).
+#  All rights reserverd.
+#
+#============================================================================
+
+#
+# Remove the high intensity FA ring
+#
+
+#
+#
+# source PATH setting from ~.bashrc
+# required for qsub to work
+#
+
+
+if [ -e ~/.bashrc ]
+then
+        . ~/.bashrc
+elif [ -e ~/.bash_profile ]
+then
+        . ~/.bash_profile
+fi
+
+# check FSL variable
+if [ -z "${FSLDIR}" ]
+then
+        echo "Environment variable FSLDIR is not defined"
+        exit 1
+fi
+
+# check DTITK_ROOT variable
+if [ -z "${DTITK_ROOT}" ]
+then
+        echo "Environment variable DTITK_ROOT is not defined"
+        exit 1
+fi
+
+# source dtitk_common.sh
+. ${DTITK_ROOT}/scripts/dtitk_common.sh
+
+if [ $# -lt 1 ]
+then
+        echo "Remove the high intensity ring which is often found in FA maps"
+        echo "Usage: `basename $0` fa_map [output_basename]"
+        exit 1
+fi
+
+famap=$1
+
+if [ $# == 1 ]
+then
+	pref=`getTVPrefix $famap`
+	out=${pref}_noRing.nii.gz
+	out_mask=${pref}_noRing_mask.nii.gz
+elif [ $# == 2 ]
+then
+	pref=$2
+	out=${pref}.nii.gz
+	out_mask=${pref}_mask.nii.gz
+fi
+fa_ribbon_mask=${pref}_tmp.nii.gz
+thr=0.2
+
+# Binarize and erode the fa map
+fslmaths $famap -bin -ero $out_mask
+
+# Keep only the outer edge of the original FA mask
+fslmaths $famap -bin -sub $out_mask $fa_ribbon_mask
+
+# Use the fa ribbon to mask the original fa map and remove values above a certain threshold 
+fslmaths $famap -mas $fa_ribbon_mask -thr $thr -bin -mul -1 -add 1 -mul $famap $out
+
+# Mask the output to get the mask without fa ring calues
+fslmaths $out -bin $out_mask
+
+# Remove tmp file
+rm $fa_ribbon_mask
+
+echo "done"
+echo
