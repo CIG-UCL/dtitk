@@ -4,10 +4,8 @@
 #
 #  Program:     This is a plug-in which integrates with both
 #		FMRIB Software Library (FSL) and DTI ToolKit (DTI-TK)
-#  Module:      $RCSfile: dti_rigid_reg,v $
+#  Module:      $RCSfile: faRing_rm,v $
 #  Language:    bash
-#  Date:        $Date: 2020/10/07 16:10:40 $
-#  Version:     $Revision: 0 $
 #
 #  Copyright (c)
 #  Michele Guerreri (michele.guerreri@gmail.com)
