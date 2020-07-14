@@ -1,23 +1,46 @@
 # dtitk/addons/RemoveFAring
-DTI-TK addons: a script to remove high FA ring around the brain
 
-The script takes in input an FA map and outputs the same map but without FA ring.
-The FA map is expected to be already masked.
-In addition, the script outputs an updated mask which not contains the removed FA ring voxels
+# Purpose
 
-The script uses both DTI-TK and FSL utilities, thus you should have both programs installed.
-Check http://dti-tk.sourceforge.net/pmwiki/pmwiki.php?n=Documentation.Install and https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation respectively for info.
+This DTI-TK addon helps to remove the high FA ring around the brain.
 
-If you have system administrator privileges, you can copy the downloaded script directly into the DTI-TK script folder, so that you don’t need to specify the absolute/relative path every time.
-Type from command line:
+# Problem
 
-sudo cp path/to/downloaded/script ${DTITK_ROOT}/scripts/
+Fractional anisotropy (FA) images of brains can often have a bright ring around the edge of the parenchyma, often caused by a loose brain mask. An illustration of this is ![FA map with a bright ring](demo/high_fa_ring.png).
 
-In order to run the script, you can type:
+# Prerequsites
 
-faRing_rm path/to/fa_map
+This addon is a unix bash script that uses both DTI-TK and FSL utilities. Thus you should have both programs installed; instructions to install them can be found http://dti-tk.sourceforge.net/pmwiki/pmwiki.php?n=Documentation.Install and https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation respectively.
 
-You can also run the script specifying the output base name:
+# Download
 
+You can download the script either as a zip archive or as a git clone from https://github.com/garyhuizhang/dtitk.
+
+# Installation
+
+You can either add the directory containing the script to your system PATH or move the downloaded script directly into the DTI-TK scripts folder. The second option may requires administrative privilege.
+
+# Usage
+
+## Input
+
+The script takes as input an FA map; the FA map is expected to have been already masked. You can additionally provide as a separate input your desired base name for the outputs; see next.
+
+## Output
+
+It outputs the map without the FA ring, as well as a binary mask which excludes the removed FA ring voxels. For the illustrative example above, the resulting output from the script is ![FA map without a bright ring](demo/high_fa_ring_removed.png).
+
+## Example command
+
+Typical usage:
+
+```bash
+  faRing_rm path/to/fa_map
+```
+
+If specifying the output base name:
+
+```bash
 faRing_rm path/to/fa_map path/to/output/base_name
+```
 
