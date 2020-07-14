@@ -41,7 +41,7 @@ Typical usage:
 If specifying the output base name:
 
 ```bash
-faRing_rm path/to/fa_map path/to/output/base_name
+  faRing_rm path/to/fa_map path/to/output/base_name
 ```
 
 # Test dataset
