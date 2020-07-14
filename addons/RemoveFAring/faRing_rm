@@ -4,7 +4,7 @@
 #
 #  Program:     This is a plug-in which integrates with both
 #		FMRIB Software Library (FSL) and DTI ToolKit (DTI-TK)
-#  Module:      $RCSfile: faRing_rm,v $
+#  Module:      faRing_rm
 #  Language:    bash
 #
 #  Copyright (c)
@@ -31,12 +31,9 @@
 #
 
 #
-#
 # source PATH setting from ~.bashrc
 # required for qsub to work
 #
-
-
 if [ -e ~/.bashrc ]
 then
         . ~/.bashrc
@@ -73,7 +70,7 @@ fi
 # the path to the input fa map
 famap=$1
 
-# if no output basename is specified, the output is formed adding suffix to the fa map filename
+# if no output basename is specified, the basename is assumed to be the prefix of the input fa map
 if [ $# == 1 ]
 then
 	pref=`getTVPrefix $famap`
@@ -86,10 +83,12 @@ then
 	out=${pref}.nii.gz
 	out_mask=${pref}_mask.nii.gz
 fi
+
 # temporary variable for storing the outer brainmask ribbon
 fa_ribbon_mask=${pref}_tmp.nii.gz
+
 # The voxels of the outer ribbon are considered part of the high FA ring if they are above the value imposed by thr
-thr=0.2 # No gray matter voxel is expected to have FA greater than 0.2. This value can be chenged if needed.
+thr=0.2 # No gray matter voxel is expected to have FA greater than 0.2. This value can be changed if needed.
 
 # Binarize and erode the fa map
 fslmaths $famap -bin -ero $out_mask
@@ -97,7 +96,7 @@ fslmaths $famap -bin -ero $out_mask
 # Keep only the outer edge of the original FA mask: the fa ribbon
 fslmaths $famap -bin -sub $out_mask $fa_ribbon_mask
 
-# Use the fa ribbon to mask the original fa map and remove values above a certain threshold
+# Use the fa ribbon to mask the original fa map and remove values above the threshold defined above
 fslmaths $famap -mas $fa_ribbon_mask -thr $thr -bin -mul -1 -add 1 -mul $famap $out
 
 # Mask the output fa with no ring to get the updated mask
