@@ -18,7 +18,7 @@ You can download the script either as a zip archive or as a git clone from https
 
 # Installation
 
-You can either add the directory containing the script to your system PATH or move the downloaded script directly into the DTI-TK scripts folder. The second option may requires administrative privilege.
+You can either add the directory containing the script to your system PATH or move the downloaded script directly into the DTI-TK scripts folder. The second option may require administrative privilege.
 
 # Usage
 
