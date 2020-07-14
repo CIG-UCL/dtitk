@@ -12,6 +12,18 @@
 #  Gary Hui Zhang (garyhuizhang@gmail.com).
 #  All rights reserverd.
 #
+#  DTI-TK is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  DTI-TK is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with DTI-TK.  If not, see <http://www.gnu.org/licenses/>.
 #============================================================================
 
 #
@@ -50,6 +62,7 @@ fi
 # source dtitk_common.sh
 . ${DTITK_ROOT}/scripts/dtitk_common.sh
 
+# if there are no inputs, returns the help message
 if [ $# -lt 1 ]
 then
         echo "Remove the high intensity ring which is often found in FA maps"
@@ -57,32 +70,37 @@ then
         exit 1
 fi
 
+# the path to the input fa map
 famap=$1
 
+# if no output basename is specified, the output is formed adding suffix to the fa map filename
 if [ $# == 1 ]
 then
 	pref=`getTVPrefix $famap`
 	out=${pref}_noRing.nii.gz
 	out_mask=${pref}_noRing_mask.nii.gz
 elif [ $# == 2 ]
+# otherwise it uses the specified output
 then
 	pref=$2
 	out=${pref}.nii.gz
 	out_mask=${pref}_mask.nii.gz
 fi
+# temporary variable for storing the outer brainmask ribbon
 fa_ribbon_mask=${pref}_tmp.nii.gz
-thr=0.2
+# The voxels of the outer ribbon are considered part of the high FA ring if they are above the value imposed by thr
+thr=0.2 # No gray matter voxel is expected to have FA greater than 0.2. This value can be chenged if needed.
 
 # Binarize and erode the fa map
 fslmaths $famap -bin -ero $out_mask
 
-# Keep only the outer edge of the original FA mask
+# Keep only the outer edge of the original FA mask: the fa ribbon
 fslmaths $famap -bin -sub $out_mask $fa_ribbon_mask
 
-# Use the fa ribbon to mask the original fa map and remove values above a certain threshold 
+# Use the fa ribbon to mask the original fa map and remove values above a certain threshold
 fslmaths $famap -mas $fa_ribbon_mask -thr $thr -bin -mul -1 -add 1 -mul $famap $out
 
-# Mask the output to get the mask without fa ring calues
+# Mask the output fa with no ring to get the updated mask
 fslmaths $out -bin $out_mask
 
 # Remove tmp file
