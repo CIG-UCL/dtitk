@@ -30,7 +30,7 @@ The script takes as input an FA map; the FA map is expected to have been already
 
 It outputs the map without the FA ring, as well as a binary mask which excludes the removed FA ring voxels. For the illustrative example above, the resulting output from the script is ![FA map without a bright ring](demo/high_fa_ring_removed.png).
 
-## Example command
+## Example commands
 
 Typical usage:
 
@@ -44,3 +44,6 @@ If specifying the output base name:
 faRing_rm path/to/fa_map path/to/output/base_name
 ```
 
+# Test dataset
+
+The dataset used above for illustration is freely available here https://www.nitrc.org/frs/download.php/1237/DTITK_Sample_Data.zip.
