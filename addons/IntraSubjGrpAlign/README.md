@@ -14,7 +14,7 @@ Matlab
 
 # Download
 
-You can download the script either as a zip archive or as a git clone from https://github.com/garyhuizhang/dtitk.
+You can download the matlab function either as a zip archive or as a git clone from https://github.com/garyhuizhang/dtitk.
 
 # Installation
 
@@ -24,7 +24,7 @@ You can either add the directory containing the matlab function to ...
 
 ## Input
 
-The script takes as input ...
+The matlab function takes as input ...
 
 ## Output
 
