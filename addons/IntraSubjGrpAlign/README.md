@@ -34,16 +34,20 @@ The function finds a target space representing the centre of all time points. Th
 
 Typical usage:
 
+```bash
 IntraSubjGrpAlign(path/to/subj_dir, tp_list_file_name)
+```
 
 Example:
 
+```bash
 IntraSubjGrpAlign('/home/myStudy/subj001','dt_tp_list.txt')
-
+```
 where dt_tp_list.txt is something like:
 
+```bash
 tp1/dtitk/tensor.nii.gz
 tp2/dtitk/tensor.nii.gz
 ...
 tpN/dtitk/tensor.nii.gz
-
+```
