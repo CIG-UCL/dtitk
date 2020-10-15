@@ -40,26 +40,22 @@ function [] = DPMqc(reg_files, param_paths)
 mkdir('DPMqc');
 
 %% Options
-% is data already registered
 if numel(reg_files)==1
     template=true;
 else
     template=false;
 end
 
-% parameter maps
-params={'FIT_ICVF','FIT_ISOVF','FIT_OD'};
-
-% Atlas
-atlas_image=[jhu_path '/usr/local/fsl/data/atlases/JHU/JHU-ICBM-FA-1mm.nii.gz'];
-atlas_labels=[jhu_path '/usr/local/fsl/data/atlases/JHU/JHU-ICBM-labels-1mm'];
-roilabels=[3 4 5 17 18 19 20 33 34];
-
 %% Targets and maps
 reg_files=readtable(reg_files,'ReadVariableNames',false); 
 param_paths=readtable(params_paths,'ReadVariableNames',false); 
 nreg=numel(reg_files);
 ndata=numel(param_paths);
+
+%% Atlas
+jhu_path='/usr/local/fsl/data/atlases/JHU';
+atlas_image=[jhu_path '/JHU-ICBM-FA-1mm.nii.gz'];
+atlas_labels=[jhu_path '/JHU-ICBM-labels-1mm'];
 
 %% List Registration Pairs
 for i=1:nreg
