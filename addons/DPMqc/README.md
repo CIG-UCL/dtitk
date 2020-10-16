@@ -11,15 +11,17 @@ Image acquisition and processing artefacts can introduce bias to fitted diffusio
 ## Software
 
 MATLAB (https://uk.mathworks.com/downloads/)
+
 NIfTI toolbox (https://uk.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image)
+
 FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation)
 
 # Download
 
 Download the toolbox as .zip or git clone using
-'''bash
+```bash
 git clone https://github.com/garyhuizhang/dtitk
-'''
+```
 
 # Installation
 
@@ -51,18 +53,18 @@ DPMqc('~/regpaths.txt', '~/noddipaths.txt')
 ```
 where ~/regpaths.txt might look like this:
 ```bash
-~/mystudy/subj1/DTI/dti_FA.nii.gz
-~/mystudy/subj2/DTI/dti_FA.nii.gz
+~/mystudy/subj1/DiffParams/dti_FA.nii.gz
+~/mystudy/subj2/DiffParams/dti_FA.nii.gz
 ...
-~/mystudy/subjN/DTI/dti_FA.nii.gz
+~/mystudy/subjN/DiffParams/dti_FA.nii.gz
 ```
 
 And ~/noddipaths.txt might look like this:
 ```bash
-~/mystudy/subj1/NODDI
-~/mystudy/subj2/NODDI
+~/mystudy/subj1/DiffParams
+~/mystudy/subj2/DiffParams
 ...
-~/mystudy/subjN/NODDI
+~/mystudy/subjN/DiffParams
 ```
 
 # Test Dataset

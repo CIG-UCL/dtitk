@@ -15,7 +15,7 @@ ref=regpair{2};
 
 % transformations output
 t_affine=['DPMqc/' i '_tmat']; %[ float_dir '/' float_name '_tmat' ];
-t_diffeo=['DPMqc/' i '_tmat']; %[ float_dir '/' float_name '_warpcoeff' ];
+t_diffeo=['DPMqc/' i '_tdiffeo']; %[ float_dir '/' float_name '_warpcoeff' ];
 
 % register
 system(['flirt -in ' float ' -ref ' ref ' -omat ' t_affine ' -cost normmi -interp trilinear']);

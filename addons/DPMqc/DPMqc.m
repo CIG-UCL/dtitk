@@ -51,8 +51,8 @@ end
 params={'FIT_ICVF','FIT_ISOVF','FIT_OD'};
 
 % Atlas
-atlas_image=[jhu_path '/usr/local/fsl/data/atlases/JHU/JHU-ICBM-FA-1mm.nii.gz'];
-atlas_labels=[jhu_path '/usr/local/fsl/data/atlases/JHU/JHU-ICBM-labels-1mm'];
+atlas_image=['/usr/local/fsl/data/atlases/JHU/JHU-ICBM-FA-1mm.nii.gz'];
+atlas_labels=['/usr/local/fsl/data/atlases/JHU/JHU-ICBM-labels-1mm'];
 roilabels=[3 4 5 17 18 19 20 33 34];
 
 %% Targets and maps
@@ -74,7 +74,7 @@ end
 
 %% Propagate Labels
 parfor i=1:nreg
-    transformlabels(atlas_labels,regpairs{1},i);
+    transformlabels(atlas_labels,regpairs{i},i);
 end
 
 %% List Data-ROI Pairs
@@ -96,6 +96,8 @@ for p=params
     writematrix(param_means,['DPMqc/' p '.txt']);
 end
 
+% cleanup, error checking, i-indexing, defaults/options file, file
+% locations for different parameters
 
 %% Plot
 

@@ -4,7 +4,7 @@ function [] = transformlabels(labels,target,i)
 % Transforms LABELS to the TARGET image
 
 % transformation input
-t_diffeo=['DPMqc/' i '_tmat'];
+t_diffeo=['DPMqc/' i '_diffeo'];
 
 % transformed labels
 labout=['DPMqc/' i '_lab.nii.gz'];
