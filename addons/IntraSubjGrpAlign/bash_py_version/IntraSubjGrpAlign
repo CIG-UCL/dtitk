@@ -3,9 +3,8 @@
 #============================================================================
 #
 #  Program:     This is a plug-in which integrates with both
-#               FMRIB Software Library (FSL) and DTI ToolKit (DTI-TK)
-#  Module:      $RCSfile: dti_rigid_reg,v $
-#  Language:    bash
+#               DTI ToolKit (DTI-TK) and python scripts
+#  Language:    bash, python
 #  Date:        $Date: 2020/10/07 16:10:40 $
 #  Version:     $Revision: 0 $
 #
