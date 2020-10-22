@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+
+# Copyright ...
+
+# IMPORTS
+import numpy as np
+# import scipy as sp
+from scipy.linalg import expm, logm, inv
+import argparse
+
+HELPTEXT = """
+Compute the average transformation and its inverse from a set of rigid
+transformations from text file in DTI-TK format
+
+USAGE:
+    python3 compute_avrg_transf.py  --in <list_of_transf> \
+                                    --out_name <output_basename>
+        
+    list_of_transf: text file with paths to the transformation files
+    output_name: base name for the output transformation and its inverse
+    
+    Example DTI-TK file format is:
+    
+    MATRIX
+    0.999674	 0.023130	 -0.010815
+    -0.021749	 0.993248	 0.113956
+    0.013377	 -0.113683	 0.993427
+    VECTOR  
+    -0.330813	 0.138959	 2.431134
+    
+    where MATRIX is the rotational part of the rigid transformation and VECTOR is
+    the translational part.
+    
+DEPENDENCIES:
+    numpy
+    scipy
+        
+Original author:
+    Michele Guerreri (michele.guerreri@gmail.com)
+    Gary Hui Zhang (garyhuizhang@gmail.com) 
+    
+DATE:
+    14/10/2020
+"""
+
+parser = argparse.ArgumentParser(description='''Compute the average transformation and its inverse from a set of rigid
+                                            transformations from text file in DTI-TK format\n
+                                            Example DTI-TK file format is:\n
+                                            \n
+                                            MATRIX\n
+                                            0.999674	 0.023130	 -0.010815\n
+                                            -0.021749	 0.993248	 0.113956\n
+                                            0.013377	 -0.113683	 0.993427\n
+                                            VECTOR\n
+                                            -0.330813	 0.138959	 2.431134\n
+                                            \n    
+                                            where MATRIX is the rotational part of the rigid transformation and VECTOR is\n
+                                            the translational part.\n''')
+parser.add_argument('-f', '--file', type=str, required=True, metavar='<list_of_transf>',
+                    help='text file with paths to the transformation files')
+parser.add_argument('-o', '--out', type=str, metavar='<output_basename>',
+                    help='base name for the output transformation and its inverse')
+args = parser.parse_args()
+
+
+def read_dtitk_transf(path_to_transf):
+    """ Read DTI-TK affine transformation file format"""
+    matrix = np.loadtxt(path_to_transf, skiprows=1, max_rows=3)
+    vector = np.loadtxt(path_to_transf, skiprows=5, max_rows=1)
+    T = [matrix, vector]
+    return T
+
+
+def merge_mtx_vec(T):
+    """Merges matrix and vectors element from affine transformation in a 4x4 matrix.
+    Takes in input a list T.
+    The first element of the list T[0] is the 3x3 array as extracted from read_dtitk_trans
+    The second element T[1] is the 3x1 array"""
+    matrix = T[0]
+    vector = T[1]
+    mrgd = np.zeros((4, 4))
+    mrgd[0:3, 0:3] = matrix
+    mrgd[0:3, 3] = vector
+    mrgd[3, 3] = 1
+    return mrgd
+
+
+def write_dtitk_transf(mrgd, outbname):
+    """ Write to file a transformation in 4x4 format into DTI-TK format"""
+    fout = open((outbname + '.aff'), 'w')
+    fout.write('MATRIX\n')
+    for ss in mrgd[:-1]:
+        line = str(ss[0:3])[1:-1] + '\n'
+        fout.write(line)
+    fout.write('VECTOR\n')
+    fout.write(str(mrgd[0:3, 3])[1:-1] + '\n')
+    fout.close()
+
+
+if __name__ == '__main__':
+    # Read the input file to check how many transformations are there
+    rigid_transf_file = open(args.file, 'r')
+    transf = rigid_transf_file.readlines()
+    n_transf = len(transf)
+
+    # the identity transformation already logtranformed
+    eye = np.zeros((4, 4))
+
+    # now loop over the transf and load the matrix and vector components
+    for xns in transf:
+        # Loead matrix from dti-tk format
+        tmp_mtx_vec = read_dtitk_transf(xns[:-1])
+        # merge matrix and vector components in 4x4 matrix
+        tmp_mrgd = merge_mtx_vec(tmp_mtx_vec)
+        # log of the merged matrix
+        tmp_logm = logm(tmp_mrgd)
+        # Sum all the transformations
+        eye += tmp_logm
+
+    # Divide by the number of transformation in the file plus the identity
+    # exponentiate to find the average transformation
+    avrg_transf = expm(eye / (n_transf + 1))
+    # compute the inverse
+    avrg_transf_inv = inv(avrg_transf)
+
+    #checking = np.dot(avrg_transf,avrg_transf_inv)
+    #print(checking)
+
+    if args.out:
+        outbasename = args.out
+    else:
+        outbasename = 'avrg'
+    # write the average transformation to dtitk file format
+    write_dtitk_transf(avrg_transf, outbasename)
+    write_dtitk_transf(avrg_transf_inv, (outbasename + '_inv'))
