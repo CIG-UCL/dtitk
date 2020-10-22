@@ -1,104 +1,40 @@
-function [] = DPMqc(reg_files, param_paths)
-%
-% function [] = DPMqc(reg_paths_txt_file, diffparams_paths_txt_file, template_option)
+function DPMqc(subj_list, param_list)
 % 
-% Create a report of the quality of diffusion MRI parameter maps, using white 
-% matter ROIs to aid identification of outliers.
-%
+% DPMqc(subj_list, param_list)
+% 
+% Reports mean diffusion parameters in JHU white matter atlas ROIs for each
+% subject.
+% 
 % Inputs:
-% REG_FILES - Path to .txt file listing target images for 
-% atlas registration.
-% If parameter maps are in a template space the text file contains the 
-% filename of the template target image. 
-% If the parameter maps are in native space the text file contains a list 
-% target images for each dataset. 
-% PARAM_PATHS - Path to .txt file listing folders containing 
-% diffusion parameter maps.
-
+% subj_list: list of absolute paths to diffusion-derived parameter maps
+% (DPM) to be used as registration targets for the JHU image
+% param_list: list of absolute paths to parameter maps in which to
+% calculate the mean values
 %
 % Outputs:
-% - list of subjects mean parameter values for each ROI
-% - violin plot of distribution of mean parameter values for each ROI
-% across subjects
-% - report on the parameter map quality
+% A text file containing an array of the mean parameters for each label and
+% each subject. Rows are subjects and columns are labels.
 % 
-% Example usage:
-% DPMqc('~/mytargetfiles.txt', '~/myparampaths.txt, false)
-% where ~/myparampaths.txt might look like this:
-% ~/mystudy/subj1/DiffusionMaps
-% ~/mystudy/subj2/DiffusionMaps
-% ...
-% ~/mystudy/subjN/DiffusionMaps
-%
-% and ~/mytargetfiles.txt might look like this:
-% ~/mystudy/subj1/DiffusionMaps/dti_FA.nii.gz
-% ~/mystudy/subj2/DiffusionMaps/dti_FA.nii.gz
-% ...
-% ~/mystudy/subjN/DiffusionMaps/dti_FA.nii.gz
+% Auhtors:
+% Michele Guerreri (michele.guerreri@gmail.com)
+% Chris Parker
+% Gary Hui Zhang
 
-%% Processing folder
-mkdir('DPMqc');
-
-%% Options
-% is data already registered
-if numel(reg_files)==1
-    template=true;
-else
-    template=false;
+if nargin < 2
+    error('Requires two input text files specifying the subject targets and parameter maps')
+elseif length(subj_list) ~= length(param_list)
+    error('Inputs do not contain the same number of images')
 end
 
-% parameter maps
-params={'FIT_ICVF','FIT_ISOVF','FIT_OD'};
+processing_dir = 'DPMqc';
+mkdir(processing_dir);
+cd(processing_dir)
 
-% Atlas
-atlas_image=['/usr/local/fsl/data/atlases/JHU/JHU-ICBM-FA-1mm.nii.gz'];
-atlas_labels=['/usr/local/fsl/data/atlases/JHU/JHU-ICBM-labels-1mm'];
-roilabels=[3 4 5 17 18 19 20 33 34];
+DPMqc1_reg(subj_list,'/usr/local/fsl');
+% finding fsl atlas, flirt, fnirt etc. is not as initially desired
+% warp field text file always produced, regardless of reg. errors
+DPMqc2_applyWarp('def_field_list.txt', subj_list,'/usr/local/fsl');
+DPMqc3_meanParams(param_list,'wrpd_labl_list.txt');
 
-%% Targets and maps
-reg_files=readtable(reg_files,'ReadVariableNames',false); 
-param_paths=readtable(params_paths,'ReadVariableNames',false); 
-nreg=numel(reg_files);
-ndata=numel(param_paths);
 
-%% List Registration Pairs
-for i=1:nreg
-    regpairs{i}{1}=reg_files{i};
-    regpairs{i}{2}=atlas_image;
-end
 
-%% Register
-parfor i=1:nreg
-    registerimages(regpairs{i},i);
-end
-
-%% Propagate Labels
-parfor i=1:nreg
-    transformlabels(atlas_labels,regpairs{i},i);
-end
-
-%% List Data-ROI Pairs
-for i=1:ndata
-    dataroipairs{i}{1}=param_paths{i};
-    if template
-        dataroipairs{i}{2}=['DPMqc/1_lab.nii.gz'];
-    else
-        dataroipairs{i}{2}=['DPMqc/' i '_lab.nii.gz'];
-    end
-end
-
-%% Mean parameters in ROIs
-for p=params
-    for i=1:ndata
-        means=meanparaminrois(dataroipairs{i},p,roilabels);
-        param_means=[param_means;means];
-    end
-    writematrix(param_means,['DPMqc/' p '.txt']);
-end
-
-% cleanup, error checking, i-indexing, defaults/options file, file
-% locations for different parameters
-
-%% Plot
-
-%% Report
