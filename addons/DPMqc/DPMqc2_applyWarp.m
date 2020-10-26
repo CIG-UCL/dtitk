@@ -51,7 +51,7 @@ while true
     appwarp_cmd = sprintf('applywarp --ref=%s --in=%s --warp=%s --out=%s --interp=nn', ...
         targ_in, jhu_labels, appwarp_in, appwarp_out);
     fprintf('%s\n',appwarp_cmd);
-    system(['bash --login -c ''' appwarp_cmd ''''],'-echo');
+%    system(['bash --login -c ''' appwarp_cmd ''''],'-echo');
     %system(appwarp_cmd, '-echo');
     % write the path of the warped labels into the output text file
     fprintf(fid_out, '%s\n', appwarp_out);
@@ -63,6 +63,8 @@ end
 fclose(fid_deffild);
 fclose(fid_targ);
 fclose(fid_out);
+
+end
 
 function [] = reg_qc(targ_in, appwarp_out, reg_qc_output)
     % Takes in input the target volume of the registration and the
@@ -78,22 +80,22 @@ function [] = reg_qc(targ_in, appwarp_out, reg_qc_output)
     bin_cmd = sprintf('fslmaths %s -bin %s', ...
                 appwarp_out, bin_out);
     fprintf('%s\n', bin_cmd);
-    system(['bash --login -c ''' bin_cmd ''''],'-echo');
+%    system(['bash --login -c ''' bin_cmd ''''],'-echo');
     % 2 Create the image
     slices_cmd = sprintf('slices %s %s -s 3 -i 0 1 -o %s', ...
         targ_in, bin_out, sprintf('%s.gif', reg_qc_output));
     fprintf('%s\n', slices_cmd);
-    system(['bash --login -c ''' slices_cmd ''''],'-echo');
+%    system(['bash --login -c ''' slices_cmd ''''],'-echo');
     % Convert it from gif into png
     cnvrt_cmd = sprintf('convert %s %s', ...
         sprintf('%s.gif', reg_qc_output), sprintf('%s.png', reg_qc_output));
     fprintf('%s\n', cnvrt_cmd);
-    system(['bash --login -c ''' cnvrt_cmd ''''],'-echo');
+%    system(['bash --login -c ''' cnvrt_cmd ''''],'-echo');
     % Remove extra files
     rm_cmd = sprintf('rm %s %s', ...
         sprintf('%s.gif', reg_qc_output), bin_out);
     fprintf('%s\n', rm_cmd);
-    system(['bash --login -c ''' rm_cmd ''''],'-echo');
+%    system(['bash --login -c ''' rm_cmd ''''],'-echo');
 end
 
 
