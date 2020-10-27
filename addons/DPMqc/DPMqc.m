@@ -15,9 +15,9 @@ function DPMqc(subj_list, param_list)
 % A text file containing an array of the mean parameters for each label and
 % each subject. Rows are subjects and columns are labels.
 % 
-% Auhtors:
+% Authors:
 % Michele Guerreri (michele.guerreri@gmail.com)
-% Chris Parker
+% Christopher Parker
 % Gary Hui Zhang
 
 if nargin < 2
@@ -29,12 +29,22 @@ end
 processing_dir = 'DPMqc';
 mkdir(processing_dir);
 cd(processing_dir)
+setupBashVars('/usr/local/fsl','/usr/local');
 
-DPMqc1_reg(subj_list,'/usr/local/fsl');
-% finding fsl atlas, flirt, fnirt etc. is not as initially desired
-% warp field text file always produced, regardless of reg. errors
-DPMqc2_applyWarp('def_field_list.txt', subj_list,'/usr/local/fsl');
+DPMqc1_reg(subj_list);
+DPMqc2_applyWarp('def_field_list.txt', subj_list);
 DPMqc3_meanParams(param_list,'wrpd_labl_list.txt');
+
+
+%- To Do?
+% function renaming?
+% error/file checking e.g. warp field text file always produced, regardless of reg. errors
+% decide FSL variable method
+% test on another computer
+% readme
+% code descriptions - check
+% remove notes
+% update dependencies to include ImageMagick
 
 
 

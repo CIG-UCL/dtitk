@@ -15,9 +15,9 @@ function DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
 % A text file containing an array of the mean parameters for each label and
 % each subject. Rows are subjects and columns are labels.
 % 
-% Auhtors:
+% Authors:
 % Michele Guerreri (michele.guerreri@gmail.com)
-% Chris Parker
+% Christopher Parker
 % Gary Hui Zhang
 
 %% Set the stage

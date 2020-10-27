@@ -13,9 +13,9 @@ function DPMqc1_reg(subj_list, fsl_path)
 % A list of paths to the deformation field output of the registration
 % process named "def_field_list.txt" is saved in the current folder
 % 
-% Auhtors:
+% Authors:
 % Michele Guerreri (michele.guerreri@gmail.com)
-% Chris Parker
+% Christopher Parker
 % Gary Hui Zhang
 
 %% Set the stage
@@ -49,23 +49,23 @@ while true
     flirt_cmd = sprintf('flirt -ref %s -in %s -omat %s -v', ...
         jhu, fnirt_in, flirt_out);
     fprintf('%s\n',flirt_cmd);
-    system(['bash --login -c ''' flirt_cmd ''''],'-echo');
+    %system(['bash --login -c ''' flirt_cmd ''''],'-echo');
     %system(['/usr/local/fsl/bin/' flirt_cmd ],'-echo');
-    %system(flirt_cmd, '-echo');
+    system(flirt_cmd, '-echo');
     % Run the non-linear registration
     fnirt_cmd = sprintf('fnirt --ref=%s --in=%s --aff=%s --cout=%s -v', ...
         jhu, fnirt_in, flirt_out, fnirt_out);
     fprintf('%s\n',fnirt_cmd);
-    system(['bash --login -c ''' fnirt_cmd ''''],'-echo');
+    %system(['bash --login -c ''' fnirt_cmd ''''],'-echo');
     %system(['/usr/local/fsl/bin/' fnirt_cmd ],'-echo');
-    %system(fnirt_cmd, '-echo');
+    system(fnirt_cmd, '-echo');
     % invert the deformation field
     invwarp_cmd = sprintf('invwarp --ref=%s --warp=%s --out=%s -v', ...
         fnirt_in, fnirt_out, invwarp_out);
     fprintf('%s\n',invwarp_cmd);
-    system(['bash --login -c ''' invwarp_cmd ''''],'-echo');
+    %system(['bash --login -c ''' invwarp_cmd ''''],'-echo');
     %system(['/usr/local/fsl/bin/' invwarp_cmd ],'-echo');
-    %system(invwarp_cmd, '-echo');
+    system(invwarp_cmd, '-echo');
     % write the path of the deformation field into the output text file
     fprintf(fid_out, '%s\n', invwarp_out);
 end
