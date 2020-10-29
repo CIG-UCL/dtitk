@@ -9,7 +9,7 @@ function DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
 % param_list: A list of paths to diffusion-derived parameter maps in which
 % to analyse mean values for each label
 % wrpd_labls_list: list of paths to warp field of the transformation from JHU to target space
-% labels: [optional] textfile in which are listed the ROI labels in which
+% labels_file: [optional] textfile in which are listed the ROI labels in which
 %         to analyse mean values. The ROI labels are natural numbers from 1
 %         to 48. See "$FSLDIR/data/atlases/JHU-labels.xml"
 %

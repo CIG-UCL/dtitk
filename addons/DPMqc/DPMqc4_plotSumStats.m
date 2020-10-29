@@ -81,9 +81,9 @@ for rr = 1:n_rois
     roi_name = jhu_labels.atlas.data.label{labels(rr)+1}.Text;
     add_title(f1, out_basename ,roi_name);
     % plot the violin
-    plot_violin(data(:,rr), ts(1));
+    v_ylim = plot_violin(data(:,rr), ts(1));
     % plot the bars
-    plot_bars(data(:,rr), ts(2), std(:,rr));
+    plot_bars(data(:,rr), ts(2), std(:,rr), v_ylim);
     % export image
     roi_name_noblank = regexprep( roi_name, ' +', '_' );
     output_name = fullfile(out_path, sprintf('%s_%s', out_basename, roi_name_noblank));
@@ -104,18 +104,22 @@ function add_title(f, basename ,roi_name)
     a.Interpreter = 'none';
 end
 
-function  plot_violin(d, ax)
+function  Ylim = plot_violin(d, ax)
     % Function to plot the vionlin and the boxplot
     axes(ax);
+    n_data = length(d);
     violin(d, 'facecolor', [.7 .7 .7]);
     Ylim = ax.YLim;
     hold on
     boxplot(d)
     ax.YLim = Ylim;
+    ax.XLim = [.5 2.5];
     ax.YLabel.String = 'Mean Value';
+    %plot(randn(n_data,1)*.05+1, d, 'ok', 'MarkerFaceColor', 'k', 'MarkerSize', 4);
+    %plot(one(n_data,1), d, 'ok')
 end
 
-function plot_bars(d, ax, std)
+function plot_bars(d, ax, std, Ylim)
     % Funtion to plot bard
     axes(ax);
     b = bar(d, 'stacked', 'facecolor', [.7 .7 .7]);
@@ -124,4 +128,8 @@ function plot_bars(d, ax, std)
     hold on
     errorbar(xCnt, d, std, std, 'b', 'LineStyle','none')
     ax.XLabel.String = 'Subject index';
+    ax.YLim = Ylim;
+    Xlim = ax.XLim;
+    plot(Xlim, ones(1,2)*mean(d), 'k-', 'linewidth', 2);
+    plot(Xlim, ones(1,2)*median(d), 'r-', 'linewidth', 2);
 end
