@@ -1,4 +1,4 @@
-function DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
+function DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
 % 
 % DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
 % 
@@ -9,7 +9,9 @@ function DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
 % param_list: A list of paths to diffusion-derived parameter maps in which
 % to analyse mean values for each label
 % wrpd_labls_list: list of paths to warp field of the transformation from JHU to target space
-% labels: [optional] list of ROI labels in which to analyse mean values
+% labels: [optional] textfile in which are listed the ROI labels in which
+%         to analyse mean values. The ROI labels are natural numbers from 1
+%         to 48. See "$FSLDIR/data/atlases/JHU-labels.xml"
 %
 % Outputs:
 % A text file containing an array of the mean parameters for each label and
@@ -23,8 +25,10 @@ function DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
 %% Set the stage
 
 % check if labels supplied
-if ~exist('labels','var')
+if ~exist('labels_file','var')
     labels=[3 4 5 17 18 19 20 33 34 25 26];
+else
+    labels=dlmread(labels_file);
 end
 % 3 GCC Genu-of-corpus-callosum
 % 4 BCC Body-of-corpus-callosum
@@ -40,7 +44,9 @@ end
 fid_params = fopen(param_list, 'r');
 fid_wrpd_labls = fopen(wrpd_labls_list, 'r');
 % open the output file 
-fid_out = fopen('mean_params.txt', 'w+');
+[~, input_filename] = fileparts(param_list);
+out_name = sprintf('%s_mean_params.txt', input_filename);
+fid_out = fopen(out_name, 'w+');
 linespec = append(strjoin([repmat("%f",length(labels),1)]),"\n");
 
 % Loop over all the lines of the file
