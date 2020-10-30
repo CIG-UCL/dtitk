@@ -33,13 +33,13 @@ Add the tool directory to your MATLAB path.
 
 ## Input
 
-subj_list - Path to .txt file listing target images for atlas registration.
-param_list - Path to .txt file listing parameter maps to assess for outliers. Images should correspond to subj_list.
+subj_list - Path to .txt file listing target images for atlas registration.  
+param_list - Path to .txt file listing parameter maps to assess for outliers. Images should correspond to subj_list.  
 
 ## Output
 
-DPMqc folder containing:
-<parameter_name>_mean_params.txt - mean parameter value in ROI for each subject (row) and each ROI (column)
+DPMqc folder containing:  
+<parameter_name>_mean_params.txt - mean parameter value in ROI for each subject (row) and each ROI (column)     
 
 ## Example commands
 
