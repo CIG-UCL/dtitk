@@ -39,7 +39,8 @@ param_list - Path to .txt file listing parameter maps to assess for outliers. Im
 ## Output
 
 DPMqc folder containing:  
-<parameter_name>_mean_params.txt - mean parameter value in ROI for each subject (row) and each ROI (column)     
+- Plots of the subjects diffusion parameter mean values for each ROI with outliers clearly shown
+- <parameter_name>_mean_params.txt - mean parameter value in ROI for each subject (row) and each ROI (column)     
 
 ## Example commands
 
