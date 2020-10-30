@@ -33,7 +33,8 @@ setupBashVars('/usr/local/fsl','/usr/local');
 
 DPMqc1_reg(subj_list);
 DPMqc2_applyWarp('def_field_list.txt', subj_list);
-DPMqc3_meanParams(param_list,'wrpd_labl_list.txt');
+mean_param_file = DPMqc3_meanParams(param_list,'wrpd_labl_list.txt');
+DPMqc4_plotSumStats(mean_param_file);
 
 
 %- To Do?

@@ -2,9 +2,9 @@
 
 This tool supports quality assessment of diffusion-derived parameter maps.
 
-# Problem
+# Description
 
-Image acquisition and processing artefacts can introduce bias to fitted diffusion parameters that are difficult to detect by conventional analysis of the model fit residuals. This tool produces summary measures of parameters in white matter ROIs, where the parameter has an expected value that is homogenous across subjects. Artefacts are often subject dependent and can therefore be identified by examining the outliers for each ROI. The parameter affected and direction of the outlier gives insight into the expected cause of the fitting problem, which is also incorporated into the report.
+Diffusion-derived parameter maps may be biased by image acquisition and processing artefacts. This tool produces summaries of parameter values in white matter ROIs, where their value is expected to be stable across subjects. Biases are often subject dependent and can therefore be identified by examining the outlying subjects for each ROI. 
 
 # Prerequsites
 
@@ -15,6 +15,8 @@ MATLAB (https://uk.mathworks.com/downloads/)
 NIfTI toolbox (https://uk.mathworks.com/matlabcentral/fileexchange/8797-tools-for-nifti-and-analyze-image)
 
 FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation)
+
+ImageMagick (https://imagemagick.org/script/download.php)
 
 # Download
 
@@ -31,27 +33,28 @@ Add the tool directory to your MATLAB path.
 
 ## Input
 
-REG_FILES - Path to .txt file listing target images for atlas registration. If parameter maps are in a template space the text file contains the filename of the template target image. If the parameter maps are in native space the text file contains a list target images for each dataset. 
-PARAM_PATHS - Path to .txt file listing folders containing diffusion parameter maps. 
+subj_list - Path to .txt file listing target images for atlas registration.
+param_list - Path to .txt file listing parameter maps to assess for outliers. Images should correspond to subj_list.
 
 ## Output
 
-PDF report on the quality of parameter maps and outliers
+DPMqc folder containing:
+<parameter_name>_mean_params.txt - mean parameter value in ROI for each subject (row) and each ROI (column)
 
 ## Example commands
 
 Typical usage:
 
 ```matlab
-DPMqc(reg_files, param_paths)
+DPMqc(subj_list, param_list)
 ```
 
 Example:
 
 ```matlab
-DPMqc('~/regpaths.txt', '~/noddipaths.txt')
+DPMqc('~/subjs_target_paths.txt', '~/parameter_paths.txt')
 ```
-where ~/regpaths.txt might look like this:
+where ~/subjs_target_paths.txt might look like this:
 ```bash
 ~/mystudy/subj1/DiffParams/dti_FA.nii.gz
 ~/mystudy/subj2/DiffParams/dti_FA.nii.gz
@@ -59,14 +62,11 @@ where ~/regpaths.txt might look like this:
 ~/mystudy/subjN/DiffParams/dti_FA.nii.gz
 ```
 
-And ~/noddipaths.txt might look like this:
+And ~/parameter_paths.txt might look like this:
 ```bash
-~/mystudy/subj1/DiffParams
-~/mystudy/subj2/DiffParams
+~/mystudy/subj1/NODDIParams/FIT_ICVF.nii.gz
+~/mystudy/subj2/NODDIParams/FIT_ICVF.nii.gz
 ...
-~/mystudy/subjN/DiffParams
+~/mystudy/subjN/NODDIParams/FIT_ICVF.nii.gz
 ```
 
-# Test Dataset
-
-A test dataset is freely available here https://www.nitrc.org/frs/download.php/11758/NODDI_example_dataset.zip

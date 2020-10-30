@@ -1,4 +1,4 @@
-function DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
+function [out_name] = DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
 % 
 % DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
 % 
