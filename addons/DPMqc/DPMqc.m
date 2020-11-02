@@ -36,16 +36,3 @@ DPMqc2_applyWarp('def_field_list.txt', subj_list);
 mean_param_file = DPMqc3_meanParams(param_list,'wrpd_labl_list.txt');
 DPMqc4_plotSumStats(mean_param_file);
 
-
-%- To Do?
-% function renaming?
-% error/file checking e.g. warp field text file always produced, regardless of reg. errors
-% decide FSL variable method
-% test on another computer
-% readme
-% code descriptions - check
-% remove notes
-% update dependencies to include ImageMagick
-
-
-
