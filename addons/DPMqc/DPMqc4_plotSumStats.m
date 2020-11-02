@@ -76,7 +76,7 @@ for rr = 1:n_rois
     % Open figure
     f1 = figure('Units', 'Normalized', 'Color', [1 1 1], 'Position', [0 0 .5 .5]);
     % Create tight subplot
-    ts = tight_subplot(1, 2, [.1 .1], [.1 .1], [.1 .1]);
+    ts = tight_subplot(1, 2, [.05 .05], [.2 .1], [.1 .1]);
     % Add title to the figure 
     roi_name = jhu_labels.atlas.data.label{labels(rr)+1}.Text;
     add_title(f1, out_basename ,roi_name);
@@ -97,7 +97,7 @@ function add_title(f, basename ,roi_name)
     figure(f);
     a = annotation('textbox');
     a.Position = [0 1 1 0];
-    a.String = sprintf('%s mean values in the %s', basename, roi_name);
+    a.String = sprintf('Input file: %s.  ROI: %s', basename, roi_name);
     a.FontSize = 14;
     a.HorizontalAlignment = 'center';
     a.FontWeight = 'bold';
@@ -113,8 +113,12 @@ function  Ylim = plot_violin(d, ax)
     hold on
     boxplot(d)
     ax.YLim = Ylim;
-    ax.XLim = [.5 2.5];
+    %ax.XLim = [.5 2.5];
     ax.YLabel.String = 'Mean Value';
+    ax.XTickLabel = [];
+    title('Violin & Box plots');
+    l = legend();
+    l.Visible = 'off';
     %plot(randn(n_data,1)*.05+1, d, 'ok', 'MarkerFaceColor', 'k', 'MarkerSize', 4);
     %plot(one(n_data,1), d, 'ok')
 end
@@ -122,14 +126,38 @@ end
 function plot_bars(d, ax, std, Ylim)
     % Funtion to plot bard
     axes(ax);
-    b = bar(d, 'stacked', 'facecolor', [.7 .7 .7]);
-    xCnt = get(b(1),'XData')';
+    n_data = length(d);
+    %b = bar(d, 'stacked', 'facecolor', [.7 .7 .7]);
+    %xCnt = get(b(1),'XData')';
     % Add errorbars
     hold on
-    errorbar(xCnt, d, std, std, 'b', 'LineStyle','none')
-    ax.XLabel.String = 'Subject index';
+    box on
+    ax.XGrid = 'on';
+    ax.XLabel.String = 'Subject list index';
     ax.YLim = Ylim;
-    Xlim = ax.XLim;
+    Xlim = [0.5 n_data+0.5];
+    ax.XLim = Xlim;
     plot(Xlim, ones(1,2)*mean(d), 'k-', 'linewidth', 2);
-    plot(Xlim, ones(1,2)*median(d), 'r-', 'linewidth', 2);
+    % Evaluate the qunatiles and plot
+    qntl = quantile(d,[.25 .5 .75]);
+    plot(Xlim, ones(1,2)*qntl(2), 'r-', 'linewidth', 2);
+    plot(Xlim, ones(1,2)*qntl(1), 'b-', 'linewidth', 1);
+    p = plot(Xlim, ones(1,2)*qntl(3), 'b-', 'linewidth', 1);
+    % for this second quartile line set the legend display off
+    p.Annotation.LegendInformation.IconDisplayStyle = 'off';
+    % Plot the data
+    %errorbar(1:n_data, d, std, std, '*k', 'Linewidth',1, 'MarkerSize', 10)
+    plot(1:n_data, d, '*k', 'Linewidth',1, 'MarkerSize', 10)
+    % Set the XTicks
+    ax.XTick = 1:n_data;
+    ax.XTickLabelMode = 'auto';
+    % Set the legend
+    l = legend({'Mean', 'Median', 'Interquartile range' ,'Data'});
+    l.Orientation = 'Horizontal';
+    l.FontSize = 14;
+    l.Position(3) = 0.5;
+    l.Position(1) = 0.25;
+    l.Position(2) = 0.05;
+    % Set Title
+    title('Mean val vs Subj ID')
 end
