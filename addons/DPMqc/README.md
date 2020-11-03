@@ -1,6 +1,6 @@
 # Purpose
 
-This tool supports quality assessment of diffusion-derived parameter maps.
+This tool supports quality assessment of diffusion-derived parameter maps (DPM).
 
 # Description
 
@@ -18,7 +18,7 @@ FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FslInstallation)
 
 ImageMagick (https://imagemagick.org/script/download.php)
 
-To get the summary statistic plots you also need to download and add to your Matlab path the following utilities:
+To get the summary statistic plots the following Matlab utilities need also to be downloaded and added to the Matlab path:
 
 Violin plot (https://uk.mathworks.com/matlabcentral/fileexchange/45134-violin-plot)
 
@@ -44,29 +44,29 @@ Add the tool directory (dtitk/addons/DPMqc) to your MATLAB path.
 ## Input
 
 ### Main inputs
-reg_subj_list - Path to .txt file listing absolut paths to target images for atlas registration.
-DPM_lists - Paths to .txt file organized in a cell format. The files list the absolut paths to parameter maps to assess for outliers. Images should correspond to reg_subj_list.
+- reg_subj_list - Path to .txt file listing absolut paths to target images for atlas registration.
+- DPM_lists - Paths to .txt file organized in cell array data type. The files list the absolut paths to parameter maps to assess for outliers. Images should correspond to reg_subj_list.
 
 ### Optional inputs
-labels_list - path to .txt file listing the ROI labels in which to analyse mean values. The ROI labels are natural numbers from 1 to 48. See "$FSLDIR/data/atlases/JHU-labels.xml" for correspondence. If empty, default ROIs are used.
-fsl_path - specify the path to fsl directory. You can retrieve this by typing 
+- labels_list - path to .txt file listing the ROI labels in which to compute mean values. The ROI labels are natural numbers from 1 to 48. Check "$FSLDIR/data/atlases/JHU-labels.xml" for correspondence. If empty, default ROIs are used.
+- fsl_path - specify the path to fsl directory. You can retrieve this by typing 
 ```bash
 echo $FSLDIR
 ```
-on your command window. If empty the function tries to find it by itself, however we recommend to input for Mac users.
+on command window.
 
 ## Output
 
-The outputs are saved in the current directory. Hence it is suggested to run the analysis in an ad hoc directory.
+The outputs are saved in the directory from which the analysis is run. Hence it is suggested to do it in an ad hoc directory.
 The output includes:  
 
-- <parameter_name>_mean_par.txt - mean parameter value in ROI for each subject (row) and each ROI (column)
+- <DPM_list_name>_mean_par.txt - mean parameter value in ROIs for each subject (row) and each ROI (column)
 - Plots of the subjects diffusion parameter mean values for each ROI with outliers clearly shown (These are saved in a folder named "plotSumStats" which is created within the process).
 
-## Typical usage:
+## Typical usage
 
 ```matlab
-DPMqc('reg_subj_list', {DPMlist_1, DPMlist_2, ..., DPMlist_n}, labels_list, fsl_path)
+DPMqc(reg_subj_list, {DPMlist_1, DPMlist_2, .., DPMlist_n}, labels_list, fsl_path)
 ```
 
 ## Example commands
@@ -87,14 +87,14 @@ subjlist_FA.txt:
 ...
 ~/mystudy/subjN/DiffParams/dti_FA.nii.gz
 ```
-subjlist_NDI.txt
+subjlist_NDI.txt:
 ```bash
 ~/mystudy/subj1/NODDIParams/FIT_ICVF.nii.gz
 ~/mystudy/subj2/NODDIParams/FIT_ICVF.nii.gz
 ...
 ~/mystudy/subjN/NODDIParams/FIT_ICVF.nii.gz
 ```
-subjlist_ODI.txt
+subjlist_ODI.txt:
 ```bash
 ~/mystudy/subj1/NODDIParams/FIT_OD.nii.gz
 ~/mystudy/subj2/NODDIParams/FIT_OD.nii.gz
@@ -104,7 +104,7 @@ subjlist_ODI.txt
 etc ...
 
 ### Create the labels list
-roi_labels.txt
+roi_labels.txt:
 ```bash
 3
 4
@@ -119,20 +119,20 @@ DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.t
 ```
 
 Other examples are:
+- Use default labels:
 ```matlab
 DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.txt'}, [], '/usr/local/fsl')
 ```
-which uses default labels.
+- Try to use the fsl environment viarable $FSLDIR (not recommended on mac):
 
 ```matlab
-DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.txt'}, [], [])
+DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.txt'}, 'roi_labels.txt', [])
 ```
-which try to use the environment viarable $FSLDI.
+- Don't output the summary statistic plots:
 
 ```matlab
-DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.txt'}, , roi_labels.txt, '/usr/local/fsl', 0)
+DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.txt'}, , 'roi_labels.txt', '/usr/local/fsl', 0)
 ```
-which doen't output the summary statistic plots.
 
 ## NOTE
-The programme outputs intermediate files which can be used to check the quality  of the alignment between the reg_subj_list inputs and the JHU labels. These are .png files which are stored in the same directory as indicated by reg_subj_list. They show the parametric map on the background and the JHU labels edges on top of it, from different views, for each subject. PLEAS CHECK IT !!
+The programme is base on a non-linear registration between the input maps specified by reg_subj_list and the JHU FA template (2mm). The success of the analysis thus strongly depends on the quality of the registration. Intermediate output files are produced to check the quality  of the alignment between the reg_subj_list inputs and the JHU labels warped in the subject native space. These are .png files which are stored in the same directory as indicated by reg_subj_list paths (named as JHU_labels_to_<targ_name>.png). They show the parametric map on the background and the JHU labels edges on top of it, from different views, for each subject. The Main topological structures should match. PLEAS CHECK IT !!
