@@ -1,6 +1,6 @@
-function DPMqc1_reg(subj_list, fsl_path)
+function DPMqc1_registration(subj_list, fsl_path)
 % 
-% DPMqc1_reg(subj_list, fsl_path)
+% DPMqc1_registration(subj_list, fsl_path)
 % 
 % Performs non-linear registration between each of the diffusion derived
 % parameter maps listed in subj_list and the JHU FA map available in FSL.
@@ -20,7 +20,7 @@ function DPMqc1_reg(subj_list, fsl_path)
 
 %% Set the stage
 
-if nargin < 2
+if nargin < 2 || isempty(fsl_path)
     % Check if the freesurfer directory is set correctly
     fsl_path = getenv('FSLDIR');
     if isempty(fsl_path)
