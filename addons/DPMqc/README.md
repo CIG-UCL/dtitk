@@ -1,3 +1,5 @@
+![DPMqc flowchart](DPMqc_flowchart.png)
+
 # Purpose
 
 This tool supports quality assessment of diffusion-derived parameter maps (DPM).
@@ -62,6 +64,8 @@ The output includes:
 
 - <DPM_list_name>_mean_par.txt - mean parameter value in ROIs for each subject (row) and each ROI (column)
 - Plots of the subjects diffusion parameter mean values for each ROI with outliers clearly shown (These are saved in a folder named "plotSumStats" which is created within the process).
+
+![Summary stats plot example](ex_output.png)
 
 ## Typical usage
 
@@ -136,3 +140,5 @@ DPMqc('subjlist_FA.txt', {'subjlist_FA.txt', 'subjlist_NDI.txt', 'subjlist_ODI.t
 
 ## NOTE
 The programme is base on a non-linear registration between the input maps specified by reg_subj_list and the JHU FA template (2mm). The success of the analysis thus strongly depends on the quality of the registration. Intermediate output files are produced to check the quality  of the alignment between the reg_subj_list inputs and the JHU labels warped in the subject native space. These are .png files which are stored in the same directory as indicated by reg_subj_list paths (named as JHU_labels_to_<targ_name>.png). They show the parametric map on the background and the JHU labels edges on top of it, from different views, for each subject. The Main topological structures should match. PLEAS CHECK IT !!
+
+![Intermediate output for registration quality assessemnt](regQA.png)
