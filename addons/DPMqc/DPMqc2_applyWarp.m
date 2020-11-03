@@ -22,7 +22,7 @@ function DPMqc2_applyWarp(def_field_list, targ_list, fsl_path)
 
 %% Set the stage
 
-if nargin < 3
+if nargin < 3 || isempty(fsl_path)
     % Check if the freesurfer directory is set correctly
     fsl_path = getenv('FSLDIR');
     if isempty(fsl_path)

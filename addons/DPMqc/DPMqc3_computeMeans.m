@@ -1,6 +1,6 @@
-function DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
+function DPMqc3_computeMeans(param_list, wrpd_labls_list, labels_file)
 % 
-% DPMqc3_meanParams(param_list, wrpd_labls_list, labels)
+% DPMqc3_computeMeans(param_list, wrpd_labls_list, labels_file)
 % 
 % Calculates the mean diffusion map parameter value for each label and each
 % subject.
@@ -25,7 +25,7 @@ function DPMqc3_meanParams(param_list, wrpd_labls_list, labels_file)
 %% Set the stage
 
 % check if labels supplied
-if ~exist('labels_file','var')
+if ~exist('labels_file','var') || isempty(labels_file)
     labels=[3 4 5 17 18 19 20 33 34 25 26];
 else
     labels=dlmread(labels_file);
@@ -45,7 +45,7 @@ fid_params = fopen(param_list, 'r');
 fid_wrpd_labls = fopen(wrpd_labls_list, 'r');
 % open the output file 
 [~, input_filename] = fileparts(param_list);
-out_name = sprintf('%s_mean_params.txt', input_filename);
+out_name = sprintf('%s_mean_par.txt', input_filename);
 fid_out = fopen(out_name, 'w+');
 linespec = append(strjoin([repmat("%f",length(labels),1)]),"\n");
 

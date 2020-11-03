@@ -19,7 +19,8 @@ function DPMqc4_plotSumStats(mean_param_file, fsl_path, label_list, std_param_fi
 %            '-pdf', '-tif'.
 %
 % Outputs:
-% A figure summary of the statistics
+% A figure summary of the statistics. It is saved in an ad hoc created
+% folder named "plotSumStats"
 % 
 % Authors:
 % Michele Guerreri (michele.guerreri@gmail.com)
@@ -59,7 +60,7 @@ n_subj = size(data,1);
 n_rois = size(data,2);
 
 % Import std if needed
-if exist('std_param_file','var')
+if exist('std_param_file','var') && ~isempty(std_param_file)
     std = dlmread(std_param_file);
 else
     std = zeros(n_subj, n_rois);
@@ -69,12 +70,17 @@ end
 jhu_xml = fullfile(fsl_path, 'data/atlases/JHU-labels.xml');
 jhu_labels = xml2struct(jhu_xml);
 
-% Define the output name
+% Define the output base name and the output dir
 [out_path, out_basename, ~] = fileparts(mean_param_file);
+out_dir = fullfile(out_path, 'plotSumStats');
+if ~exist(out_dir, 'dir')
+    mkdir(out_dir);
+end
 % Loop over the ROIs and create the plot
 for rr = 1:n_rois
     % Open figure
-    f1 = figure('Units', 'Normalized', 'Color', [1 1 1], 'Position', [0 0 .5 .5]);
+    f1 = figure('Units', 'Centimeters', 'Color', [1 1 1], 'Position', [0 0 25.5   14.5]);
+    f1.Units = 'Normalized';
     % Create tight subplot
     ts = tight_subplot(1, 2, [.05 .05], [.2 .1], [.1 .1]);
     % Add title to the figure 
@@ -86,7 +92,7 @@ for rr = 1:n_rois
     plot_bars(data(:,rr), ts(2), std(:,rr), v_ylim);
     % export image
     roi_name_noblank = regexprep( roi_name, ' +', '_' );
-    output_name = fullfile(out_path, sprintf('%s_%s', out_basename, roi_name_noblank));
+    output_name = fullfile(out_dir, sprintf('%s_%s', out_basename, roi_name_noblank));
     export_fig(f1, output_name, img_format, '-nocrop');
     close(f1);
 end
