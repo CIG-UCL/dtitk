@@ -11,7 +11,7 @@ function DPMqc(reg_subj_list, DPM_lists, labels_list, fsl_path, do_sumStatPlot)
 % (DPM) to be used as registration targets for the JHU image
 %
 % DPM_lists: 1xn cells. In each cell the name of a file for each DPM which
-% needs to be analysed. Each of this files shousld be constructed as 
+% needs to be analysed. Each of this files should be constructed as 
 % reg_subj_list]
 %
 % labels_list: [optional] textfile in which are listed the ROI labels in which
@@ -37,6 +37,8 @@ function DPMqc(reg_subj_list, DPM_lists, labels_list, fsl_path, do_sumStatPlot)
 nDPM = length(DPM_lists);
 img_format = '-png'; % change this if needed
 
+% Setup
+setupBashVars(fsl_path,[]);
 % Run the registration
 DPMqc1_registration(reg_subj_list, fsl_path);
 % Apply warping
