@@ -69,8 +69,13 @@ TractTool -in Tractography.vtk -view -useTube 1
 ```
 For filtering tracts:
 ```bash
-TractTool -in Tractography.vtk -roi CorpusCallosumMask.nii.gz -filter TractsThroughCorpusCallosum.vtk
+TractTool -in Tractography.vtk -roi MidSagittalCorpusCallosumMask.nii.gz -filter TractsThroughCorpusCallosum.vtk
 ```
+View filtered tracts:
+```bash
+TractTool -in TractsThroughCorpusCallosum.vtk -view
+```
+
 # Test dataset
 
 A test dataset is freely available here https://www.nitrc.org/frs/download.php/11758/NODDI_example_dataset.zip
