@@ -66,10 +66,7 @@ For visualisation:
 TractTool -in Tractography.vtk -view
 ```
 ![Tractography](demo/tractography.PNG)
-For visualisation with tubes:
-```bash
-TractTool -in Tractography.vtk -view -useTube 1
-```
+
 For filtering tracts:
 ```bash
 TractTool -in Tractography.vtk -roi MidSagittalCorpusCallosumMask.nii.gz -filter TractsThroughCorpusCallosum.vtk
@@ -78,7 +75,13 @@ View filtered tracts:
 ```bash
 TractTool -in TractsThroughCorpusCallosum.vtk -view
 ```
-![Tractography](demo/CorpusCallosumTractography.PNG)
+![FilteredTractography](demo/CorpusCallosumTractography.PNG)
+
+View filtered as tubes:
+```bash
+TractTool -in TractsThroughCorpusCallosum.vtk -view -useTube 1
+```
+![FilteredTractographyTube](demo/CorpusCallosumTractographyTubes.PNG)
 
 # Test dataset
 
