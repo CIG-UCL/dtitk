@@ -27,6 +27,8 @@ TractTool       -   visualises and filters dtitk formatted tractographies.
 
 ### Input
 
+![Tensor visualisation](demo/tensor.png)
+
 The required inputs to the function are:  
     -in        Tensor vector volume in dtitk format (NOT FSL FORMAT) as input  
     -seed      A mask volume of locations where the tracts may be  
@@ -63,6 +65,7 @@ For visualisation:
 ```bash
 TractTool -in Tractography.vtk -view
 ```
+![Tractography](demo/tractography.PNG)
 For visualisation with tubes:
 ```bash
 TractTool -in Tractography.vtk -view -useTube 1
@@ -75,6 +78,7 @@ View filtered tracts:
 ```bash
 TractTool -in TractsThroughCorpusCallosum.vtk -view
 ```
+![Tractography](demo/CorpusCallosumTractography.PNG)
 
 # Test dataset
 
