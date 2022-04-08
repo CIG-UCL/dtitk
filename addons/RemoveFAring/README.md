@@ -6,7 +6,9 @@ This DTI-TK addon helps to remove the high FA ring around the brain.
 
 # Problem
 
-Fractional anisotropy (FA) images of brains can often have a bright ring around the edge of the parenchyma, often caused by a loose brain mask. An illustration of this is ![FA map with a bright ring](demo/high_fa_ring.png).
+Fractional anisotropy (FA) images of brains can often have a bright ring around the edge of the parenchyma, often caused by a loose brain mask. This bright ring is often a cause of imperfect image registration. Removing it can help reduce or eliminate cases of poor image registration.
+
+An illustration of the bright ring, using [the DTI-TK example dataset](http://www.nitrc.org/frs/download.php/1237/DTITK_Sample_Data.zip), is shown below: ![FA map with a bright ring](demo/high_fa_ring.png).
 
 # Prerequsites
 
@@ -46,4 +48,4 @@ If specifying the output base name:
 
 # Test dataset
 
-The dataset used above for illustration is freely available here https://www.nitrc.org/frs/download.php/1237/DTITK_Sample_Data.zip.
+The dataset used above for illustration is the freely available [DTI-TK example dataset]( https://www.nitrc.org/frs/download.php/1237/DTITK_Sample_Data.zip).
